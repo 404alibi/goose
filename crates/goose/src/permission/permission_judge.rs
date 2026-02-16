@@ -137,7 +137,7 @@ pub async fn detect_read_only_tools(
         .complete(
             "You are a good analyst and can detect operations whether they have read-only operations.",
             &check_messages,
-            &[tool.clone()],
+            std::slice::from_ref(&tool),
         )
         .await;
 

@@ -82,14 +82,13 @@ impl ToolPermissionStore {
 
     pub fn check_permission(&self, tool_request: &ToolRequest) -> Option<bool> {
         let context_hash = self.hash_tool_context(tool_request);
-        let tool_call = tool_request.tool_call.as_ref().unwrap();
+        let tool_call = tool_request.tool_call.as_ref().ok()?;
         let key = format!("{}:{}", tool_call.name, context_hash);
 
         self.permissions.get(&key).and_then(|records| {
             records
                 .iter()
-                .filter(|record| record.expiry.is_none_or(|exp| exp > Utc::now().timestamp()))
-                .next_back()
+                .rfind(|record| record.expiry.is_none_or(|exp| exp > Utc::now().timestamp()))
                 .map(|record| record.allowed)
         })
     }
@@ -101,7 +100,8 @@ impl ToolPermissionStore {
         expiry_duration: Option<Duration>,
     ) -> anyhow::Result<()> {
         let context_hash = self.hash_tool_context(tool_request);
-        let tool_call = tool_request.tool_call.as_ref().unwrap();
+        let tool_call = tool_request.tool_call.as_ref()
+            .map_err(|e| anyhow::anyhow!("Invalid tool call: {}", e))?;
         let key = format!("{}:{}", tool_call.name, context_hash);
 
         let record = ToolPermissionRecord {
@@ -123,11 +123,13 @@ impl ToolPermissionStore {
         // Create a hash of the tool's arguments to differentiate similar calls
         // This helps identify when the same tool is being used in a different context
         let mut hasher = Hasher::new();
-        hasher.update(
-            serde_json::to_string(&tool_request.tool_call.as_ref().unwrap().arguments)
-                .unwrap_or_default()
-                .as_bytes(),
-        );
+        if let Ok(tool_call) = tool_request.tool_call.as_ref() {
+            hasher.update(
+                serde_json::to_string(&tool_call.arguments)
+                    .unwrap_or_default()
+                    .as_bytes(),
+            );
+        }
         hasher.finalize().to_hex().to_string()
     }
 

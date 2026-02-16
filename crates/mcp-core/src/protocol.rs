@@ -76,11 +76,11 @@ impl TryFrom<JsonRpcRaw> for JsonRpcMessage {
 
     fn try_from(raw: JsonRpcRaw) -> Result<Self, <Self as TryFrom<JsonRpcRaw>>::Error> {
         // If it has an error field, it's an error response
-        if raw.error.is_some() {
+        if let Some(error) = raw.error {
             return Ok(JsonRpcMessage::Error(JsonRpcError {
                 jsonrpc: raw.jsonrpc,
                 id: raw.id,
-                error: raw.error.unwrap(),
+                error,
             }));
         }
 

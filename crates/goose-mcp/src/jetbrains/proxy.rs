@@ -14,12 +14,14 @@ const PORT_RANGE_START: u16 = 63342;
 const PORT_RANGE_END: u16 = 63352;
 const ENDPOINT_CHECK_INTERVAL: Duration = Duration::from_secs(10);
 
+#[allow(dead_code)]
 #[derive(Debug, Serialize, Deserialize)]
 struct IDEResponseOk {
     status: String,
     error: Option<String>,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Serialize, Deserialize)]
 struct IDEResponseErr {
     status: Option<String>,

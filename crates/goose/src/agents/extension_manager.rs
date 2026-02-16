@@ -487,9 +487,9 @@ impl ExtensionManager {
         let extension_name = params.get("extension_name").and_then(|v| v.as_str());
 
         // If extension name is provided, we can just look it up
-        if extension_name.is_some() {
+        if let Some(ext_name) = extension_name {
             let result = self
-                .read_resource_from_extension(uri, extension_name.unwrap())
+                .read_resource_from_extension(uri, ext_name)
                 .await?;
             return Ok(result);
         }

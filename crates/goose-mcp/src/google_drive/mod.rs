@@ -2172,12 +2172,14 @@ impl GoogleDriveRouter {
 
         let mut final_result = vec![];
 
-        if mime_type.is_some() && (body.is_some() || path.is_some()) {
-            let update_result = self
-                .update_file_contents(file_id, mime_type.unwrap(), body, path, allow_shared_drives)
-                .await?;
-            final_result.extend(update_result);
-        };
+        if let Some(mime) = mime_type {
+            if body.is_some() || path.is_some() {
+                let update_result = self
+                    .update_file_contents(file_id, mime, body, path, allow_shared_drives)
+                    .await?;
+                final_result.extend(update_result);
+            }
+        }
 
         if let Some(label_ops) = params.get("updateLabels").and_then(|q| q.as_array()) {
             let label_result = self.update_label(file_id, label_ops).await?;

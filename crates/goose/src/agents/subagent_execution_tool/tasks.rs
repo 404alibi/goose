@@ -222,8 +222,7 @@ fn extract_json_from_line(line: &str) -> Option<String> {
 fn process_output(stdout_output: String) -> Result<Value, String> {
     let last_line = stdout_output
         .lines()
-        .filter(|line| !line.trim().is_empty())
-        .next_back()
+        .rfind(|line| !line.trim().is_empty())
         .unwrap_or("");
 
     if let Some(json_string) = extract_json_from_line(last_line) {
