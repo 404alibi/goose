@@ -1,0 +1,13 @@
+{
+  "crawlDate": "2026-02-16T01:59:19.862Z",
+  "results": {},
+  "totalAssets": {
+    "screenshots": 0,
+    "videos": 0,
+    "icons": 0
+  },
+  "outputDirectories": {
+    "assets": "/vercel/sandbox/extracted_assets/assets",
+    "metadata": "/vercel/sandbox/extracted_assets/metadata"
+  }
+}

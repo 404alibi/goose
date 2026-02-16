@@ -1,0 +1,17 @@
+{
+  "name": "agua-caliente-app-crawler",
+  "version": "1.0.0",
+  "description": "Crawler to extract assets from Agua Caliente app from app stores",
+  "main": "crawler.js",
+  "scripts": {
+    "start": "node crawler.js",
+    "crawl": "node crawler.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "puppeteer": "^21.5.0",
+    "fs-extra": "^11.1.1",
+    "path": "^0.12.7"
+  }
+}
